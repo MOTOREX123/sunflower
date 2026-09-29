@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="A romantic sunflower surprise for someone special">
+    <title>For You 🌻</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app" id="app">
+        <!-- Scene 0: Opening Screen -->
+        <section class="scene scene--active" data-scene="0" id="scene-0">
+            <div class="scene__bg">
+                <div class="particles" id="particles-0"></div>
+                <div class="glow glow--1"></div>
+                <div class="glow glow--2"></div>
+            </div>
+            <div class="scene__content">
+                <p class="opening__line opening__line--1" id="opening-line-1">Hey you... 🌻</p>
+                <p class="opening__line opening__line--2" id="opening-line-2">I made something for you.</p>
+                <button class="btn btn--primary" id="btn-start" aria-label="Open the surprise">
+                    <span class="btn__text">Open it ❤️</span>
+                    <span class="btn__glow"></span>
+                </button>
+            </div>
+            <button class="music-toggle" id="music-toggle" aria-label="Toggle music" title="Play music">
+                <svg class="music-icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                </svg>
+            </button>
+        </section>
+
+        <!-- Scene 1: The Sunflower -->
+        <section class="scene" data-scene="1" id="scene-1">
+            <div class="scene__bg">
+                <div class="particles" id="particles-1"></div>
+                <div class="glow glow--center"></div>
+            </div>
+            <div class="scene__content scene__content--center">
+                <div class="sunflower-container" id="sunflower-main">
+                    <div class="sunflower__seed" id="seed"></div>
+                    <div class="sunflower__stem" id="stem">
+                        <div class="sunflower__leaf leaf--left" id="leaf-left"></div>
+                        <div class="sunflower__leaf leaf--right" id="leaf-right"></div>
+                    </div>
+                    <div class="sunflower__flower" id="flower">
+                        <div class="sunflower__center" id="flower-center"></div>
+                        <div class="sunflower__petals" id="petals-container"></div>
+                    </div>
+                    <div class="floating-particles" id="floating-particles"></div>
+                </div>
+                <div class="sunflower__messages" id="sunflower-messages">
+                    <p class="message message--1" id="msg-1">Because you deserve something that always turns toward the light. 🌻</p>
+                    <p class="message message--2" id="msg-2">Just like I always find my way back to you.</p>
+                </div>
+                <button class="btn btn--next" id="btn-next-1" aria-label="Continue to next scene">
+                    <span>Continue ❤️</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Scene 2: Personal Message -->
+        <section class="scene" data-scene="2" id="scene-2">
+            <div class="scene__bg">
+                <div class="particles" id="particles-2"></div>
+                <div class="glow glow--top"></div>
+                <div class="glow glow--bottom"></div>
+            </div>
+            <div class="scene__content scene__content--center">
+                <div class="message-sequence" id="message-sequence">
+                    <p class="seq-line" id="seq-1">Somehow, in this huge world...</p>
+                    <p class="seq-line seq-line--highlight" id="seq-2">I found you. ❤️</p>
+                    <p class="seq-line" id="seq-3">And honestly...</p>
+                    <p class="seq-line" id="seq-4">And I don't want to imagine my days without you.</p>
+                </div>
+                <button class="btn btn--next" id="btn-next-2" aria-label="Continue to next scene">
+                    <span>Continue ❤️</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Scene 3: Code Message -->
+        <section class="scene" data-scene="3" id="scene-3">
+            <div class="scene__bg">
+                <div class="particles" id="particles-3"></div>
+                <div class="glow glow--center"></div>
+            </div>
+            <div class="scene__content scene__content--center">
+                <div class="code-card" id="code-card">
+                    <div class="code-card__header">
+                        <div class="code-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <div class="code-card__body">
+                        <pre class="code-content" aria-label="Code snippet"><code><span class="keyword">while</span> <span class="literal">True</span>:
+    <span class="variable">me</span>.<span class="function">love</span>(<span class="variable">you</span>)</code></pre>
+                        <div class="code-output" id="code-output">
+                            <span class="output-text">Running forever. ❤️</span>
+                            <span class="cursor" id="cursor"></span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn--next" id="btn-next-3" aria-label="Continue to next scene">
+                    <span>Continue ❤️</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Scene 4: Sunflower Garden -->
+        <section class="scene" data-scene="4" id="scene-4">
+            <div class="scene__bg scene__bg--garden">
+                <div class="night-sky" id="night-sky">
+                    <div class="stars" id="stars"></div>
+                    <div class="moon" id="moon"></div>
+                </div>
+                <div class="garden-particles" id="garden-particles"></div>
+                <div class="glow glow--garden"></div>
+            </div>
+            <div class="scene__content scene__content--garden">
+                <div class="garden" id="garden">
+                    <!-- Sunflowers will be generated by JS -->
+                </div>
+                <div class="garden__messages" id="garden-messages">
+                    <p class="garden-message" id="garden-msg-1">If I could give you one thing...</p>
+                    <p class="garden-message" id="garden-msg-2">I'd give you a sunflower.</p>
+                    <p class="garden-message" id="garden-msg-3">But since I can't hand you one right now...</p>
+                    <p class="garden-message garden-message--highlight" id="garden-msg-4">I made you a little garden instead. 🌻</p>
+                </div>
+                <button class="btn btn--next" id="btn-next-4" aria-label="Continue to final scene">
+                    <span>Continue ❤️</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Scene 5: Final Message -->
+        <section class="scene" data-scene="5" id="scene-5">
+            <div class="scene__bg">
+                <div class="particles" id="particles-5"></div>
+                <div class="glow glow--center"></div>
+            </div>
+            <div class="scene__content scene__content--center">
+                <div class="sunflower-container sunflower--small" id="sunflower-final">
+                    <div class="sunflower__stem">
+                        <div class="sunflower__leaf leaf--left"></div>
+                        <div class="sunflower__leaf leaf--right"></div>
+                    </div>
+                    <div class="sunflower__flower sunflower__flower--bloomed">
+                        <div class="sunflower__center"></div>
+                        <div class="sunflower__petals" id="petals-final"></div>
+                    </div>
+                </div>
+                <div class="final-messages" id="final-messages">
+                    <p class="final-message" id="final-1">You're my favorite person.</p>
+                    <p class="final-message" id="final-2">Happy to have you in my life. ❤️</p>
+                    <div class="signature">
+                        <p class="signature__line">Always yours,</p>
+                        <p class="signature__name">— Your favorite coder 💻🌻</p>
+                    </div>
+                </div>
+                <button class="btn btn--restart" id="btn-restart" aria-label="Restart the experience">
+                    <span>See it again 🌻</span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Audio element for optional music -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="Paaro.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>

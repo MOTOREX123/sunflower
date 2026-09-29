@@ -1,0 +1,1097 @@
+/* ========================================
+   RESET & BASE
+   ======================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg-dark: #0d0d0d;
+    --bg-darker: #050505;
+    --sunflower-yellow: #ffd54f;
+    --sunflower-gold: #ffb300;
+    --sunflower-orange: #ff8f00;
+    --sunflower-dark: #e65100;
+    --warm-white: #fffef7;
+    --cream: #fff8e1;
+    --text-primary: #fffef7;
+    --text-secondary: #ffe082;
+    --text-muted: #ffcc80;
+    --glass-bg: rgba(255, 255, 247, 0.05);
+    --glass-border: rgba(255, 213, 79, 0.15);
+    --glow-yellow: rgba(255, 213, 79, 0.4);
+    --glow-gold: rgba(255, 179, 0, 0.3);
+    --transition-fast: 0.3s ease;
+    --transition-normal: 0.6s ease;
+    --transition-slow: 1.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --transition-fast: 0.01s;
+        --transition-normal: 0.01s;
+        --transition-slow: 0.01s;
+    }
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.6;
+    touch-action: manipulation;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   APP & SCENE LAYOUT
+   ======================================== */
+.app {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.scene {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--transition-normal), visibility var(--transition-normal);
+    z-index: 1;
+}
+
+.scene--active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+.scene__bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.scene__content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 480px;
+    padding: clamp(1.5rem, 5vh, 3rem) clamp(1rem, 4vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.scene__content--center {
+    text-align: center;
+}
+
+.scene__content--garden {
+    padding-top: clamp(1rem, 3vh, 2rem);
+    padding-bottom: clamp(2rem, 5vh, 3rem);
+}
+
+/* ========================================
+   BACKGROUND EFFECTS
+   ======================================== */
+.glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    animation: glowPulse 6s ease-in-out infinite;
+}
+
+.glow--1 {
+    top: -50%;
+    left: -30%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, var(--glow-gold) 0%, transparent 70%);
+    animation-delay: 0s;
+}
+
+.glow--2 {
+    bottom: -50%;
+    right: -30%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, var(--glow-yellow) 0%, transparent 70%);
+    animation-delay: 3s;
+}
+
+.glow--center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, var(--glow-yellow) 0%, transparent 70%);
+    animation: glowPulse 4s ease-in-out infinite;
+}
+
+.glow--top {
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 40%;
+    background: radial-gradient(ellipse, var(--glow-gold) 0%, transparent 70%);
+}
+
+.glow--bottom {
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 40%;
+    background: radial-gradient(ellipse, var(--glow-yellow) 0%, transparent 70%);
+}
+
+.glow--garden {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 60%;
+    background: radial-gradient(ellipse at bottom, var(--glow-gold) 0%, transparent 60%);
+}
+
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.15); }
+}
+
+.particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--sunflower-yellow);
+    border-radius: 50%;
+    opacity: 0;
+    animation: particleFloat 8s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+    0% { opacity: 0; transform: translateY(100vh) scale(0); }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(-100vh) scale(1); }
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+.opening__line {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    color: var(--warm-white);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeSlideUp 0.8s ease forwards;
+    text-shadow: 0 2px 20px var(--glow-yellow);
+}
+
+.opening__line--1 { animation-delay: 0.3s; }
+.opening__line--2 { animation-delay: 0.8s; }
+
+.message {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+    line-height: 1.7;
+    color: var(--cream);
+    opacity: 0;
+    transform: translateY(15px);
+    max-width: 90%;
+    margin: 0 auto;
+    text-shadow: 0 1px 10px rgba(255, 213, 79, 0.3);
+}
+
+.message--1 { animation: fadeSlideUp 0.8s ease 0.5s forwards; }
+.message--2 { animation: fadeSlideUp 0.8s ease 1.2s forwards; }
+
+.seq-line {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    line-height: 1.8;
+    color: var(--cream);
+    opacity: 0;
+    transform: translateY(20px);
+    margin-bottom: clamp(0.8rem, 2vh, 1.2rem);
+    text-shadow: 0 1px 10px rgba(255, 213, 79, 0.2);
+}
+
+.seq-line--highlight {
+    color: var(--sunflower-yellow);
+    font-weight: 600;
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    text-shadow: 0 2px 20px var(--glow-yellow);
+}
+
+.garden-message {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    line-height: 1.7;
+    color: var(--cream);
+    opacity: 0;
+    transform: translateY(15px);
+    max-width: 90%;
+    margin: 0 auto;
+    text-shadow: 0 1px 10px rgba(255, 213, 79, 0.3);
+}
+
+.garden-message--highlight {
+    color: var(--sunflower-yellow);
+    font-weight: 600;
+    font-size: clamp(1.3rem, 4.5vw, 1.7rem);
+    text-shadow: 0 2px 20px var(--glow-yellow);
+}
+
+.final-message {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+    line-height: 1.6;
+    color: var(--cream);
+    opacity: 0;
+    transform: translateY(20px);
+    margin-bottom: clamp(0.8rem, 2vh, 1.2rem);
+    text-shadow: 0 1px 15px rgba(255, 213, 79, 0.3);
+}
+
+.signature {
+    margin-top: clamp(1.5rem, 4vh, 2.5rem);
+    padding-top: clamp(1rem, 3vh, 1.5rem);
+    border-top: 1px solid var(--glass-border);
+    width: 100%;
+    max-width: 300px;
+}
+
+.signature__line {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color: var(--text-muted);
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.signature__name {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    color: var(--sunflower-yellow);
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(10px);
+    text-shadow: 0 1px 10px var(--glow-yellow);
+}
+
+@keyframes fadeSlideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: clamp(0.875rem, 2.5vh, 1rem) clamp(1.5rem, 5vw, 2.5rem);
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+    font-weight: 500;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    min-height: 48px;
+    min-width: 48px;
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--sunflower-yellow);
+    outline-offset: 3px;
+}
+
+.btn--primary {
+    background: linear-gradient(135deg, var(--sunflower-gold), var(--sunflower-orange));
+    color: var(--bg-dark);
+    box-shadow: 0 4px 20px var(--glow-gold), 0 0 0 1px rgba(255, 213, 79, 0.2);
+    position: relative;
+    overflow: hidden;
+    margin-top: clamp(1.5rem, 4vh, 2.5rem);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeSlideUp 0.8s ease 1.5s forwards;
+}
+
+.btn--primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--sunflower-yellow), var(--sunflower-gold));
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.btn--primary:hover::before {
+    opacity: 1;
+}
+
+.btn__text { position: relative; z-index: 1; }
+
+.btn__glow {
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--sunflower-yellow), var(--sunflower-orange));
+    border-radius: 52px;
+    filter: blur(8px);
+    opacity: 0.5;
+    animation: btnGlow 2s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes btnGlow {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.btn--next {
+    background: var(--glass-bg);
+    color: var(--sunflower-yellow);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    margin-top: clamp(2rem, 5vh, 3rem);
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.btn--next:hover {
+    background: rgba(255, 213, 79, 0.1);
+    box-shadow: 0 4px 20px var(--glow-yellow);
+}
+
+.btn--restart {
+    background: linear-gradient(135deg, var(--sunflower-gold), var(--sunflower-orange));
+    color: var(--bg-dark);
+    box-shadow: 0 4px 20px var(--glow-gold);
+    margin-top: clamp(1.5rem, 4vh, 2.5rem);
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.btn--restart:hover {
+    box-shadow: 0 6px 30px var(--glow-gold), 0 0 0 2px var(--sunflower-yellow);
+}
+
+/* ========================================
+   MUSIC TOGGLE
+   ======================================== */
+.music-toggle {
+    position: fixed;
+    top: clamp(1rem, 3vh, 1.5rem);
+    right: clamp(1rem, 3vw, 1.5rem);
+    z-index: 100;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    color: var(--sunflower-yellow);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    touch-action: manipulation;
+}
+
+.music-toggle:hover {
+    background: rgba(255, 213, 79, 0.15);
+    box-shadow: 0 4px 20px var(--glow-yellow);
+    transform: scale(1.05);
+}
+
+.music-toggle.playing .music-icon {
+    animation: musicPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* ========================================
+   SCENE 1: SUNFLOWER ANIMATION
+   ======================================== */
+.sunflower-container {
+    position: relative;
+    width: clamp(200px, 60vw, 320px);
+    height: clamp(300px, 70vh, 450px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
+}
+
+.sunflower--small {
+    width: clamp(150px, 45vw, 220px);
+    height: clamp(220px, 55vh, 300px);
+    margin-bottom: clamp(1rem, 3vh, 2rem);
+}
+
+/* Seed */
+.sunflower__seed {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: #5d4037;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow:
+        0 0 0 2px #4e342e,
+        0 0 10px rgba(93, 64, 55, 0.5),
+        inset -2px -2px 4px rgba(0,0,0,0.3);
+    z-index: 10;
+    opacity: 0;
+}
+
+.sunflower__seed.is-visible {
+    animation: seedAppear 0.6s ease forwards;
+}
+
+@keyframes seedAppear {
+    0% { opacity: 0; transform: translateX(-50%) scale(0); }
+    50% { transform: translateX(-50%) scale(1.3); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+/* Stem */
+.sunflower__stem {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 0;
+    background: linear-gradient(180deg, #2e7d32, #1b5e20);
+    border-radius: 3px;
+    z-index: 5;
+    transform-origin: bottom center;
+    transition: height 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.sunflower__stem::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(46, 125, 50, 0.6), transparent);
+    border-radius: 3px;
+}
+
+.leaf {
+    position: absolute;
+    width: clamp(24px, 6vw, 36px);
+    height: clamp(14px, 3.5vw, 22px);
+    background: linear-gradient(135deg, #2e7d32, #1b5e20);
+    border-radius: 50% 0 50% 0;
+    transform-origin: center;
+    opacity: 0;
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2);
+}
+
+.leaf--left {
+    bottom: clamp(40px, 12vh, 80px);
+    left: -2px;
+    transform: rotate(-45deg);
+}
+
+.leaf--right {
+    bottom: clamp(80px, 20vh, 140px);
+    right: -2px;
+    transform: rotate(45deg);
+}
+
+.leaf.is-visible {
+    animation: leafGrow 0.8s ease forwards;
+}
+
+@keyframes leafGrow {
+    0% { opacity: 0; transform: rotate(var(--rot)) scale(0) translateX(var(--tx)); }
+    100% { opacity: 1; transform: rotate(var(--rot)) scale(1) translateX(0); }
+}
+
+/* Flower - attached to top of stem */
+.sunflower__flower {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sunflower__flower.is-visible {
+    opacity: 1;
+    animation: flowerAppear 0.6s ease forwards;
+}
+
+@keyframes flowerAppear {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-50%) translateY(20px); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(-50%) translateY(0); }
+}
+
+.sunflower__center {
+    width: clamp(40px, 10vw, 60px);
+    height: clamp(40px, 10vw, 60px);
+    background: radial-gradient(circle at 30% 30%, #ffb300, #e65100 60%, #3e2723);
+    border-radius: 50%;
+    box-shadow:
+        0 4px 20px rgba(230, 81, 0, 0.5),
+        inset 0 -4px 10px rgba(0,0,0,0.3),
+        inset 0 4px 10px rgba(255, 179, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    transform: scale(0);
+}
+
+.sunflower__center.is-visible {
+    animation: centerBloom 0.8s ease forwards;
+}
+
+@keyframes centerBloom {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.sunflower__center::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    background: radial-gradient(circle at 30% 30%, transparent 40%, rgba(62, 39, 35, 0.5));
+    border-radius: 50%;
+}
+
+.sunflower__center::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 6px 6px;
+    border-radius: 50%;
+    opacity: 0.5;
+}
+
+.sunflower__petals {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(140px, 35vw, 220px);
+    height: clamp(140px, 35vw, 220px);
+    transform: translate(-50%, -50%);
+}
+
+.petal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(28px, 7vw, 44px);
+    height: clamp(55px, 14vw, 85px);
+    background: linear-gradient(180deg, #fff8e1 0%, #ffd54f 50%, #ffb300 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    transform-origin: center bottom;
+    box-shadow:
+        0 -2px 8px rgba(255, 213, 79, 0.4),
+        inset 0 -4px 10px rgba(255, 179, 0, 0.3),
+        inset 0 4px 10px rgba(0,0,0,0.1);
+    opacity: 0;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.petal::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    width: 70%;
+    height: 80%;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 247, 0.3));
+    border-radius: inherit;
+}
+
+.petal.is-visible {
+    animation: petalBloom 0.6s ease forwards;
+}
+
+@keyframes petalBloom {
+    0% { opacity: 0; transform: rotate(var(--r)) translateY(-50%) scale(0); }
+    50% { opacity: 1; transform: rotate(var(--r)) translateY(-50%) scale(1.2); }
+    100% { opacity: 1; transform: rotate(var(--r)) translateY(-50%) scale(1); }
+}
+
+.sunflower__flower.is-bloomed,
+.sunflower__flower.sunflower__flower--bloomed {
+    animation: flowerSway 3s ease-in-out infinite;
+}
+
+@keyframes flowerSway {
+    0%, 100% { transform: translateX(-50%) translateY(-50%) rotate(-1deg); }
+    50% { transform: translateX(-50%) translateY(-50%) rotate(1deg); }
+}
+
+/* Floating particles around sunflower */
+.floating-particles {
+    position: absolute;
+    inset: -50px;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.float-particle {
+    position: absolute;
+    width: clamp(4px, 1vw, 8px);
+    height: clamp(4px, 1vw, 8px);
+    background: var(--sunflower-yellow);
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatAround 4s ease-in-out infinite;
+    box-shadow: 0 0 10px var(--sunflower-yellow);
+}
+
+@keyframes floatAround {
+    0%, 100% { opacity: 0; transform: translate(0, 0) scale(0.5); }
+    25% { opacity: 0.8; transform: translate(var(--tx1), var(--ty1)) scale(1); }
+    50% { opacity: 0.6; transform: translate(var(--tx2), var(--ty2)) scale(0.8); }
+    75% { opacity: 0.8; transform: translate(var(--tx3), var(--ty3)) scale(1); }
+}
+
+.sunflower__messages {
+    width: 100%;
+    padding: 0 1rem;
+}
+
+/* ========================================
+   SCENE 3: CODE CARD
+   ======================================== */
+.code-card {
+    width: 100%;
+    max-width: 360px;
+    background: linear-gradient(135deg, rgba(13, 13, 13, 0.95), rgba(20, 20, 20, 0.95));
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 213, 79, 0.05),
+        inset 0 1px 0 rgba(255, 255, 247, 0.05);
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    animation: cardAppear 0.8s ease forwards;
+    position: relative;
+}
+
+.code-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--sunflower-yellow), transparent);
+    opacity: 0.5;
+}
+
+@keyframes cardAppear {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.code-card__header {
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.code-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.code-dots span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+}
+
+.code-dots span:nth-child(1) { background: #ff5f57; border-color: #ff5f57; }
+.code-dots span:nth-child(2) { background: #ffbd2e; border-color: #ffbd2e; }
+.code-dots span:nth-child(3) { background: #28ca42; border-color: #28ca42; }
+
+.code-card__body {
+    padding: 1.5rem;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    line-height: 1.7;
+    overflow-x: auto;
+}
+
+.code-content {
+    margin: 0;
+    color: var(--cream);
+}
+
+.code-output {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+}
+
+.output-text {
+    color: var(--sunflower-yellow);
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    opacity: 0;
+    animation: fadeIn 0.6s ease 1s forwards;
+}
+
+.cursor {
+    width: 2px;
+    height: 1.2em;
+    background: var(--sunflower-yellow);
+    animation: cursorBlink 1s ease-in-out infinite;
+    box-shadow: 0 0 8px var(--sunflower-yellow);
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* Syntax highlighting */
+.keyword { color: #c792ea; }
+.literal { color: #f78c6c; }
+.variable { color: #ffcb6b; }
+.function { color: #82aaff; }
+
+/* ========================================
+   SCENE 4: GARDEN
+   ======================================== */
+.scene__bg--garden {
+    background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 50%, #0d0d0d 100%);
+}
+
+.night-sky {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 20% 20%, rgba(255, 213, 79, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 30%, rgba(255, 179, 0, 0.06) 0%, transparent 50%);
+}
+
+.stars {
+    position: absolute;
+    inset: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--warm-white);
+    border-radius: 50%;
+    animation: starTwinkle 3s ease-in-out infinite;
+    box-shadow: 0 0 6px var(--warm-white);
+}
+
+@keyframes starTwinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+}
+
+.moon {
+    position: absolute;
+    top: clamp(2rem, 5vh, 4rem);
+    right: clamp(1.5rem, 4vw, 3rem);
+    width: clamp(50px, 12vw, 80px);
+    height: clamp(50px, 12vw, 80px);
+    background: radial-gradient(circle at 30% 30%, #fffef7, #ffd54f 60%, #ffb300);
+    border-radius: 50%;
+    box-shadow:
+        0 0 40px rgba(255, 213, 79, 0.4),
+        0 0 80px rgba(255, 179, 0, 0.2),
+        inset -5px -5px 20px rgba(255, 179, 0, 0.3);
+    animation: moonGlow 6s ease-in-out infinite;
+}
+
+@keyframes moonGlow {
+    0%, 100% { box-shadow: 0 0 40px rgba(255, 213, 79, 0.4), 0 0 80px rgba(255, 179, 0, 0.2), inset -5px -5px 20px rgba(255, 179, 0, 0.3); }
+    50% { box-shadow: 0 0 60px rgba(255, 213, 79, 0.6), 0 0 120px rgba(255, 179, 0, 0.3), inset -5px -5px 20px rgba(255, 179, 0, 0.4); }
+}
+
+.garden-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.garden-particle {
+    position: absolute;
+    width: clamp(3px, 0.8vw, 6px);
+    height: clamp(3px, 0.8vw, 6px);
+    background: var(--sunflower-yellow);
+    border-radius: 50%;
+    opacity: 0;
+    animation: gardenFloat 6s ease-in-out infinite;
+    box-shadow: 0 0 8px var(--sunflower-yellow);
+}
+
+@keyframes gardenFloat {
+    0% { opacity: 0; transform: translateY(100vh) scale(0.5); }
+    15% { opacity: 0.7; }
+    85% { opacity: 0.7; }
+    100% { opacity: 0; transform: translateY(-100vh) scale(1); }
+}
+
+.garden {
+    position: relative;
+    width: 100%;
+    height: clamp(200px, 45vh, 300px);
+    margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
+}
+
+.garden-sunflower {
+    position: absolute;
+    bottom: 0;
+    transform-origin: bottom center;
+    animation: sway 4s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes sway {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+}
+
+.garden-sunflower:nth-child(odd) {
+    animation: sway 4.5s ease-in-out infinite reverse;
+}
+
+.garden-sunflower:nth-child(3n) {
+    animation: sway 3.8s ease-in-out infinite;
+}
+
+.garden-sunflower .sunflower__stem {
+    position: relative;
+    width: 4px;
+    height: clamp(80px, 20vw, 120px);
+    background: linear-gradient(180deg, #2e7d32, #1b5e20);
+    border-radius: 2px;
+    margin: 0 auto;
+}
+
+.garden-sunflower .sunflower__leaf {
+    position: absolute;
+    width: clamp(16px, 4vw, 24px);
+    height: clamp(10px, 2.5vw, 16px);
+    background: linear-gradient(135deg, #2e7d32, #1b5e20);
+    border-radius: 50% 0 50% 0;
+    opacity: 0.9;
+}
+
+.garden-sunflower .leaf--left {
+    bottom: 30%;
+    left: -2px;
+    transform: rotate(-40deg);
+}
+
+.garden-sunflower .leaf--right {
+    bottom: 55%;
+    right: -2px;
+    transform: rotate(40deg);
+}
+
+.garden-sunflower .sunflower__flower {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 5;
+    opacity: 1;
+}
+
+.garden-sunflower .sunflower__center {
+    width: clamp(24px, 6vw, 36px);
+    height: clamp(24px, 6vw, 36px);
+    background: radial-gradient(circle at 30% 30%, #ffb300, #e65100 60%, #3e2723);
+    border-radius: 50%;
+    box-shadow: 0 2px 10px rgba(230, 81, 0, 0.5);
+}
+
+.garden-sunflower .sunflower__petals {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(80px, 20vw, 120px);
+    height: clamp(80px, 20vw, 120px);
+    transform: translate(-50%, -50%);
+}
+
+.garden-sunflower .petal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(16px, 4vw, 24px);
+    height: clamp(32px, 8vw, 48px);
+    background: linear-gradient(180deg, #fff8e1 0%, #ffd54f 50%, #ffb300 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    transform-origin: center bottom;
+    box-shadow: 0 -1px 4px rgba(255, 213, 79, 0.4);
+    opacity: 1;
+}
+
+.garden__messages {
+    width: 100%;
+    padding: 0 1rem;
+}
+
+/* ========================================
+   SCENE 5: FINAL SUNFLOWER
+   ======================================== */
+#petals-final .petal {
+    opacity: 1;
+    animation: petalIdle 4s ease-in-out infinite;
+}
+
+@keyframes petalIdle {
+    0%, 100% { transform: rotate(var(--r)) translateY(0) scale(1); }
+    50% { transform: rotate(var(--r)) translateY(-3px) scale(1.02); }
+}
+
+.final-messages {
+    width: 100%;
+    padding: 0 1rem;
+}
+
+/* ========================================
+   RESPONSIVE & ACCESSIBILITY
+   ======================================== */
+@media (max-width: 480px) {
+    .scene__content {
+        padding: clamp(1rem, 4vh, 2rem) clamp(0.75rem, 3vw, 1.5rem);
+    }
+
+    .btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+    .scene__content {
+        min-height: auto;
+        padding: 2rem 1rem;
+    }
+
+    .sunflower-container {
+        height: 65vh;
+        margin-bottom: 1rem;
+    }
+
+    .garden {
+        height: 50vh;
+        margin-bottom: 1rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --glass-border: var(--sunflower-yellow);
+        --text-muted: var(--sunflower-yellow);
+    }
+}
+
+/* Print styles */
+@media print {
+    .scene { display: none !important; }
+    .scene--active { display: flex !important; position: static; opacity: 1; visibility: visible; }
+    .music-toggle, .btn { display: none !important; }
+    body { background: white; color: black; }
+}
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+    outline: 2px solid var(--sunflower-yellow);
+    outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+    background: var(--sunflower-yellow);
+    color: var(--bg-dark);
+}
