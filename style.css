@@ -640,10 +640,10 @@ body {
    ======================================== */
 .video-box {
     position: relative;
-    width: 100%;
-    max-width: clamp(280px, 70vw, 400px);
+    width: clamp(280px, 24vw, 340px);
     aspect-ratio: 4 / 5;
-    margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
+    margin-left: auto;
+    margin-right: auto;
     border-radius: 16px;
     overflow: hidden;
     background: var(--bg-darker);
@@ -673,25 +673,13 @@ body {
     display: block;
 }
 
-/* Responsive adjustments for video boxes */
-@media (max-width: 480px) {
-    .video-box {
-        max-width: 90vw;
-        aspect-ratio: 3 / 4;
-        margin-bottom: clamp(1rem, 3vh, 2rem);
-        border-radius: 12px;
-    }
-
-    .video-box::before {
-        border-radius: 14px;
-    }
-}
-
 @media (max-height: 600px) and (orientation: landscape) {
     .video-box {
-        max-width: clamp(200px, 50vw, 300px);
+        width: clamp(280px, 35vw, 340px);
         aspect-ratio: 16 / 9;
         margin-bottom: 1rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
@@ -986,18 +974,6 @@ body {
     .btn {
         padding: 0.875rem 1.5rem;
         font-size: 0.95rem;
-    }
-
-    .video-box {
-        width: min(100%, 360px);
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .video-box video {
-        width: 100%;
-        max-height: 45vh;
-        object-fit: cover;
     }
 
     .sunflower__messages,
