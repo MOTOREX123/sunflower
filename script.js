@@ -103,7 +103,7 @@ const CONFIG = {
     global: {
         reducedMotion: false,
         musicEnabled: false,
-        musicFile: "khat.mp3" // Add your music file here
+        musicFile: "music/khat.mp3" // Add your music file here
     }
 };
 
@@ -167,9 +167,6 @@ function init() {
 
     // Initialize background particles
     initBackgroundParticles();
-
-    // Initialize garden
-    initGarden();
 
     // Initialize final sunflower petals
     initFinalSunflower();
@@ -348,46 +345,18 @@ function restartExperience() {
 }
 
 function resetAllAnimations() {
-    // Reset scene 1 sunflower
-    const seed = document.getElementById('seed');
-    const stem = document.getElementById('stem');
-    const leafLeft = document.getElementById('leaf-left');
-    const leafRight = document.getElementById('leaf-right');
-    const flower = document.getElementById('flower');
-    const petalsContainer = document.getElementById('petals-container');
-    const floatingParticles = document.getElementById('floating-particles');
+    // Reset scene 1 video
+    const video1 = document.getElementById('bloom');
+    if (video1) {
+        video1.pause();
+        video1.currentTime = 0;
+    }
+
+    // Reset messages and button
     const msg1 = document.getElementById('msg-1');
     const msg2 = document.getElementById('msg-2');
     const btnNext1 = document.getElementById('btn-next-1');
 
-    // Remove all animation classes
-    [seed, leafLeft, leafRight, flower].forEach(el => {
-        if (el) {
-            el.classList.remove('is-visible', 'is-bloomed');
-        }
-    });
-
-    // Reset stem height
-    if (stem) {
-        stem.style.height = '0';
-    }
-
-    // Reset center and petals
-    const center = document.querySelector('#flower .sunflower__center');
-    if (center) {
-        center.classList.remove('is-visible');
-    }
-
-    const petals = document.querySelectorAll('#petals-container .petal');
-    petals.forEach(petal => {
-        petal.classList.remove('is-visible');
-    });
-
-    // Clear petals and floating particles
-    if (petalsContainer) petalsContainer.innerHTML = '';
-    if (floatingParticles) floatingParticles.innerHTML = '';
-
-    // Reset messages and button
     [msg1, msg2, btnNext1].forEach(el => {
         if (el) {
             el.style.animation = 'none';
@@ -428,6 +397,13 @@ function resetAllAnimations() {
 
     // Re-type code
     typeCode();
+
+    // Reset scene 4 video
+    const video4 = document.getElementById('garden');
+    if (video4) {
+        video4.pause();
+        video4.currentTime = 0;
+    }
 
     // Reset scene 4 garden messages
     for (let i = 1; i <= 4; i++) {
@@ -492,64 +468,18 @@ function triggerSceneAnimations(sceneIndex) {
     }
 }
 
-/* ---- Scene 1: Sunflower ---- */
+/* ---- Scene 1: Sunflower (Video) ---- */
 function animateSunflowerScene() {
     const timings = CONFIG.sunflower.animationTimings;
 
-    // Create petals
-    createPetals();
-
-    // Create floating particles
-    createFloatingParticles();
-
-    // 0. Seed appears immediately
-    const seed = document.getElementById('seed');
-    if (seed) {
-        seed.classList.add('is-visible');
+    // Ensure video plays when scene becomes active
+    const video = document.getElementById('sunflower-bloom-video');
+    if (video) {
+        video.currentTime = 0;
+        video.play().catch(() => {
+            // Autoplay may be blocked, video will show first frame
+        });
     }
-
-    // 1. Stem grows upward
-    setTimeout(() => {
-        animateStem();
-    }, timings.stemGrow);
-
-    // 2. Left leaf appears
-    setTimeout(() => {
-        animateLeaf('leaf-left');
-    }, timings.leafLeft);
-
-    // 3. Right leaf appears
-    setTimeout(() => {
-        animateLeaf('leaf-right');
-    }, timings.leafRight);
-
-    // 4. Flower head appears AT THE TOP OF THE STEM (after stem finishes growing)
-    setTimeout(() => {
-        showFlowerHead();
-    }, timings.stemGrow + 1500); // stem growth duration + small buffer
-
-    // 5. Brown center blooms
-    setTimeout(() => {
-        animateFlowerCenter();
-    }, timings.centerBloom);
-
-    // 6. Yellow petals bloom around the center one by one
-    setTimeout(() => {
-        animatePetals();
-    }, timings.petalsBloom);
-
-    // 7. Flower gently sways forever (after petals finish)
-    setTimeout(() => {
-        const flower = document.getElementById('flower');
-        if (flower) {
-            flower.classList.add('is-bloomed');
-        }
-    }, timings.petalsBloom + 16 * 60 + 600);
-
-    // Start floating particles
-    setTimeout(() => {
-        startFloatingParticles();
-    }, timings.particlesStart);
 
     // Show messages
     setTimeout(() => {
@@ -564,103 +494,6 @@ function animateSunflowerScene() {
     setTimeout(() => {
         showButton('btn-next-1');
     }, timings.buttonShow);
-}
-
-function showFlowerHead() {
-    const flower = document.getElementById('flower');
-    if (flower) {
-        flower.classList.add('is-visible');
-    }
-}
-
-function createPetals() {
-    const container = document.getElementById('petals-container');
-    if (!container) return;
-
-    const petalCount = 16;
-    const petals = [];
-
-    for (let i = 0; i < petalCount; i++) {
-        const petal = document.createElement('div');
-        petal.className = 'petal';
-        petal.style.setProperty('--r', `${(360 / petalCount) * i}deg`);
-        petal.style.transform = `rotate(${((360 / petalCount) * i)}deg) translateY(-50%)`;
-        container.appendChild(petal);
-        petals.push(petal);
-    }
-}
-
-function animateStem() {
-    const stem = document.getElementById('stem');
-    if (!stem) return;
-
-    const targetHeight = 280; // Adjust based on container
-    stem.style.height = `${targetHeight}px`;
-}
-
-function animateLeaf(leafId) {
-    const leaf = document.getElementById(leafId);
-    if (!leaf) return;
-
-    const isLeft = leafId === 'leaf-left';
-    leaf.style.setProperty('--rot', isLeft ? '-45deg' : '45deg');
-    leaf.style.setProperty('--tx', isLeft ? '20px' : '-20px');
-    leaf.classList.add('is-visible');
-}
-
-function animateFlowerCenter() {
-    const center = document.querySelector('#flower .sunflower__center');
-    if (!center) return;
-
-    center.classList.add('is-visible');
-}
-
-function animatePetals() {
-    const petals = document.querySelectorAll('#petals-container .petal');
-    petals.forEach((petal, i) => {
-        setTimeout(() => {
-            petal.classList.add('is-visible');
-        }, i * 60);
-    });
-}
-
-function createFloatingParticles() {
-    const container = document.getElementById('floating-particles');
-    if (!container) return;
-
-    const particleCount = 20;
-    const directions = [
-        { x: -1, y: -1 }, { x: 1, y: -1 }, { x: -1, y: 1 }, { x: 1, y: 1 },
-        { x: -0.5, y: -1.5 }, { x: 0.5, y: -1.5 }, { x: -1.5, y: -0.5 }, { x: 1.5, y: -0.5 }
-    ];
-
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'float-particle';
-        const dir = directions[i % directions.length];
-        const distance = 80 + Math.random() * 60;
-
-        particle.style.setProperty('--tx1', `${dir.x * distance * 0.3}px`);
-        particle.style.setProperty('--ty1', `${dir.y * distance * 0.3}px`);
-        particle.style.setProperty('--tx2', `${dir.x * distance * 0.6}px`);
-        particle.style.setProperty('--ty2', `${dir.y * distance * 0.6}px`);
-        particle.style.setProperty('--tx3', `${dir.x * distance}px`);
-        particle.style.setProperty('--ty3', `${dir.y * distance}px`);
-
-        particle.style.left = '50%';
-        particle.style.top = '50%';
-        particle.style.animationDelay = `${Math.random() * 2}s`;
-        particle.style.animationDuration = `${3 + Math.random() * 2}s`;
-
-        container.appendChild(particle);
-    }
-}
-
-function startFloatingParticles() {
-    const particles = document.querySelectorAll('.float-particle');
-    particles.forEach(p => {
-        p.style.animationPlayState = 'running';
-    });
 }
 
 /* ---- Scene 2: Personal Message ---- */
@@ -744,86 +577,18 @@ function typeCode(lines = CONFIG.code.codeLines, delay = CONFIG.code.codeTypeDel
     });
 }
 
-/* ---- Scene 4: Garden ---- */
-function initGarden() {
-    const garden = document.getElementById('garden');
-    if (!garden) return;
-
-    const count = CONFIG.garden.sunflowerCount;
-    const positions = generateGardenPositions(count);
-
-    positions.forEach((pos, i) => {
-        const sunflower = createGardenSunflower(i);
-        sunflower.style.left = `${pos.x}%`;
-        sunflower.style.bottom = '0';
-        sunflower.style.animationDelay = `${Math.random() * 2}s`;
-        sunflower.style.animationDuration = `${3.5 + Math.random() * 1.5}s`;
-        garden.appendChild(sunflower);
-    });
-}
-
-function generateGardenPositions(count) {
-    const positions = [];
-    const margin = 8;
-    const usableWidth = 100 - margin * 2;
-
-    for (let i = 0; i < count; i++) {
-        // Distribute with some randomness
-        const baseX = margin + (i / (count - 1)) * usableWidth;
-        const jitter = (Math.random() - 0.5) * (usableWidth / count) * 0.6;
-        positions.push({ x: Math.max(margin, Math.min(100 - margin, baseX + jitter)) });
-    }
-
-    return positions;
-}
-
-function createGardenSunflower(index) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'garden-sunflower';
-    wrapper.style.zIndex = index;
-
-    const stem = document.createElement('div');
-    stem.className = 'sunflower__stem';
-    stem.style.height = `${80 + Math.random() * 60}px`;
-
-    const leafLeft = document.createElement('div');
-    leafLeft.className = 'sunflower__leaf leaf--left';
-
-    const leafRight = document.createElement('div');
-    leafRight.className = 'sunflower__leaf leaf--right';
-
-    stem.appendChild(leafLeft);
-    stem.appendChild(leafRight);
-
-    const flower = document.createElement('div');
-    flower.className = 'sunflower__flower';
-
-    const center = document.createElement('div');
-    center.className = 'sunflower__center';
-
-    const petalsContainer = document.createElement('div');
-    petalsContainer.className = 'sunflower__petals';
-
-    // Create 12 petals for garden sunflowers
-    for (let i = 0; i < 12; i++) {
-        const petal = document.createElement('div');
-        petal.className = 'petal';
-        petal.style.setProperty('--r', `${(360 / 12) * i}deg`);
-        petal.style.transform = `rotate(${((360 / 12) * i)}deg) translateY(-50%)`;
-        petalsContainer.appendChild(petal);
-    }
-
-    flower.appendChild(center);
-    flower.appendChild(petalsContainer);
-
-    wrapper.appendChild(stem);
-    wrapper.appendChild(flower);
-
-    return wrapper;
-}
-
+/* ---- Scene 4: Garden (Video) ---- */
 function animateGardenScene() {
     const { messages, highlightIndex, messageDelays, buttonText, buttonDelay } = CONFIG.garden;
+
+    // Ensure video plays when scene becomes active
+    const video = document.getElementById('sunflower-garden-video');
+    if (video) {
+        video.currentTime = 0;
+        video.play().catch(() => {
+            // Autoplay may be blocked, video will show first frame
+        });
+    }
 
     messages.forEach((msg, i) => {
         const el = document.getElementById(`garden-msg-${i + 1}`);
