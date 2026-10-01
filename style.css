@@ -1020,3 +1020,76 @@ body {
     background: var(--sunflower-yellow);
     color: var(--bg-dark);
 }
+
+/* ========================================
+   MOBILE LAYOUT FIX
+   ======================================== */
+
+.video-box {
+    width: min(100%, 450px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto clamp(1.2rem, 4vh, 2rem);
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.video-box video {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 450px;
+    max-height: 55vh;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+@media (max-width: 480px) {
+    .scene {
+        align-items: flex-start;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .scene__content {
+        width: 100%;
+        max-width: 480px;
+        min-height: 100dvh;
+        height: auto;
+        margin: 0 auto;
+        padding: 2rem 1rem 2.5rem;
+        justify-content: center;
+    }
+
+    .video-box {
+        width: min(100%, 360px);
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .video-box video {
+        width: 100%;
+        max-height: 45vh;
+        object-fit: cover;
+    }
+
+    .sunflower__messages,
+    .garden__messages,
+    .final-messages {
+        width: 100%;
+        text-align: center;
+    }
+
+    .message,
+    .garden-message,
+    .final-message {
+        max-width: 100%;
+    }
+
+    .btn--next {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
